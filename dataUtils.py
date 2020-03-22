@@ -7,7 +7,7 @@ import s3fs
 
 def outputReportData(df, fileName, writeLocalCSV=False):
 
-    if conf.AWS_ACCESS_KEY == '':
+    if conf.AWS_ACCESS_KEY_ID == '':
         writeLocalCSV = True
 
     # Data is written to GSheet for easy review by XR team
@@ -20,7 +20,7 @@ def outputReportData(df, fileName, writeLocalCSV=False):
 
     # Data for report uploaded to S3
 
-    if conf.AWS_ACCESS_KEY == '':
+    if conf.AWS_ACCESS_KEY_ID == '':
 
         log.info('No S3 creds found; data written to CSV')
 
@@ -30,8 +30,8 @@ def outputReportData(df, fileName, writeLocalCSV=False):
 
         bytes_to_write = df.to_csv(None, index=False).encode()
         fs = s3fs.S3FileSystem(
-            key=conf.AWS_ACCESS_KEY,
-            secret=conf.AWS_SECRET_KEY)
+            key=conf.AWS_ACCESS_KEY_ID,
+            secret=conf.AWS_SECRET_ACCESS_KEY)
 
         with fs.open('s3://' + conf.S3_BUCKET + '/' + fileName + '.csv', 'wb') as f:
             f.write(bytes_to_write)
