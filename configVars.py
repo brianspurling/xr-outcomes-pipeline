@@ -67,8 +67,5 @@ CONFIG_VARS = {
         'Book Sales': {
             'Date': 'date',
             'UK Sales': 'sales'},
-        'Commentary': {
-            'Chart Name': 'chart_name',
-            'Commentary Text': 'commentary_text'}
     }
 }
