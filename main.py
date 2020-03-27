@@ -11,7 +11,6 @@ import plPoliticalParties
 import plWebsite
 import plSocialMedia
 import plBookSales
-import plCommentary
 
 
 def run(args):
@@ -50,8 +49,6 @@ def pipeline():
     plSocialMedia.migrate()
 
     plBookSales.migrate()
-
-    plCommentary.migrate()
 
 
 def extractWebStats():
