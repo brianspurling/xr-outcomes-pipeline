@@ -40,7 +40,8 @@ CONFIG_VARS = {
             'XR LA Name': 'xr_la_name',
             'Declared?': 'is_declared',
             'Declaration Date': 'declaration_date',
-            'Target Net Zero Year':  'target_net_zero_year'},
+            'Target Net Zero Year':  'target_net_zero_year',
+            'Source': 'source'},
         'Political Parties': {
             'Organisation Name': 'org_name',
             'Is Political Org?': 'is_political_org',

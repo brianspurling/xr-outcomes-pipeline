@@ -35,7 +35,8 @@ def migrate():
         'xr_la_name',
         'is_declared',
         'declaration_date',
-        'target_net_zero_year']]
+        'target_net_zero_year',
+        'source']]
 
     df.declaration_date = pd.to_datetime(df.declaration_date)
 
