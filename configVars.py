@@ -33,6 +33,8 @@ CONFIG_VARS = {
          'view_id': '184845394'},
     ],
 
+    'ACTION_NETWORK_API_URL': 'https://actionnetwork.org/api/v2/people',
+
     'STM': {
         'Local Authorities': {
             'Local Authority Code (LAD18NM)': 'code',
@@ -65,6 +67,9 @@ CONFIG_VARS = {
             'ga:date': 'date',
             'ga:pageviews': 'page_views',
             'ga:sessions': 'sessions'},
+        'Action Network': {
+            'Date': 'date',
+            'Activists': 'activists'},
         'Book Sales': {
             'Date': 'date',
             'UK Sales': 'sales'},
