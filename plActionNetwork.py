@@ -7,6 +7,7 @@ import logger as log
 
 import pandas as pd
 
+import requests
 import os
 import json
 
@@ -19,35 +20,25 @@ def extract():
 
     # Until we have creds, we're picking up sample data from file
 
-    # TODO: log.info("Fetching website data from Action Network API")
-    log.info("Reading sample Action Network data from file")
+    log.info("Fetching website data from Action Network API")
 
-    # TODO: API auth goes here
-    # url = conf.ACTION_NETWORK_API_URL
-    fileName = 'action-network-example-data.txt'
+    url = conf.ACTION_NETWORK_API_URL
+    key = conf.ACTION_NETWORK_API_KEY
 
     createdDates = []
     activists = []
 
     nextPage = True
-    pageNumber = 0
     while nextPage:
 
-        # TODO: API fetch goes here
-
-        with open(os.path.join(conf.TMP_DATA_DIR, fileName)) as json_file:
-            jsonText = json_file.read()
-            rawData = json.loads(jsonText)
-
-        pageNumber += 1
-        print('Processing page ' + str(pageNumber))
+        print('Fetching: ' + str(url))
+        r = requests.get(url, headers={'OSDI-API-Token': key})
+        rawData = r.json()
 
         if 'next' in rawData['_links']:
             nextPage = True
-            fileName = rawData['_links']['next']['href']
-            # url = rawData['_links']['next']['href']
+            url = rawData['_links']['next']['href']
         else:
-            # TODO: not clear exactly what indicates the last page:
             # "A next link will be present if the page in the collection is the
             # last page, but not present if no resources are returned (ie.
             # you've gone past the last page), to improve speed."
@@ -63,6 +54,9 @@ def extract():
         df['Date'],
         utc=False,
         errors='coerce').dt.date
+
+    df = df.groupby(['Date']).agg({'Activists': 'sum'}).reset_index()
+    df = df.sort_values('Date')
 
     conf.SRC_SS.write(
         wsName=SRC_WORKSHEET_NAME,
