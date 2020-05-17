@@ -56,9 +56,24 @@ class Conf():
                 os.environ["TARGET_SS_NAME"] = self.TARGET_SS_NAME
             else:
                 raise ValueError("Missing config: source or target spreadsheet names")
-
         self.SOURCE_SS_NAME = os.environ["SOURCE_SS_NAME"]
         self.TARGET_SS_NAME = os.environ["TARGET_SS_NAME"]
+
+        # And API keys
+
+        if 'ACTION_NETWORK_API_KEY' not in os.environ:
+            if hasattr(self, 'ACTION_NETWORK_API_KEY'):
+                os.environ["ACTION_NETWORK_API_KEY"] = self.ACTION_NETWORK_API_KEY
+            else:
+                raise ValueError("Missing config: Action Network API Key")
+        self.ACTION_NETWORK_API_KEY = os.environ["ACTION_NETWORK_API_KEY"]
+
+        if 'FACEBOOK_INSTAGRAM_API_KEY_GLOBAL' not in os.environ:
+            if hasattr(self, 'FACEBOOK_INSTAGRAM_API_KEY_GLOBAL'):
+                os.environ["FACEBOOK_INSTAGRAM_API_KEY_GLOBAL"] = self.FACEBOOK_INSTAGRAM_API_KEY_GLOBAL
+            else:
+                raise ValueError("Missing config: Facebook/Instagram (global) API Key")
+        self.FACEBOOK_INSTAGRAM_API_KEY_GLOBAL = os.environ["FACEBOOK_INSTAGRAM_API_KEY_GLOBAL"]
 
         self.WARNINGS = []
         self.SRC_SS = None
