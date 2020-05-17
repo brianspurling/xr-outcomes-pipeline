@@ -32,7 +32,10 @@ CONFIG_VARS = {
         {'domain': 'https://rebellion.earth',
          'view_id': '184845394'},
     ],
-
+'GLOBAL_INSTAGRAM_ID': '17841408183412514',
+'GLOBAL_FACEBOOK_ID': '239675493315233',
+'UK_INSTAGRAM_ID': '',
+'UK_FACEBOOK_ID': '401847960644025',
     'STM': {
         'Local Authorities': {
             'Local Authority Code (LAD18NM)': 'code',

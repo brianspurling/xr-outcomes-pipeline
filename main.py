@@ -12,6 +12,7 @@ import plWebsite
 import plSocialMedia
 import plBookSales
 import plActionNetwork
+import plInstagram 
 
 
 def run(args):
@@ -35,18 +36,20 @@ def run(args):
 
 def pipeline():
     """Run the whole pipeline."""
-    # Extract Data
+    Extract Data
 
     plWebsite.extract()
 
     plActionNetwork.extract()
+    
+    plInstagram.extract()
 
     # Migrate from source to target
 
     plLocalAuthorities.migrate()
 
     plPoliticalParties.migrate()
-
+    
     plWebsite.migrate()
 
     plSocialMedia.migrate()
@@ -54,7 +57,9 @@ def pipeline():
     plBookSales.migrate()
 
     plActionNetwork.migrate()
-
-
+    
+    plInstagram.migrate()
+         
+    # plInstagram.instagramPipeline()
 if __name__ == "__main__":
     run(sys.argv[1:])
