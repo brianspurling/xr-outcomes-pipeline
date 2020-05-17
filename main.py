@@ -36,7 +36,7 @@ def run(args):
 
 def pipeline():
     """Run the whole pipeline."""
-    Extract Data
+    # Extract Data
 
     plWebsite.extract()
 
