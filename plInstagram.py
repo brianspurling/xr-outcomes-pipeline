@@ -85,7 +85,7 @@ def migrate():
     df = conf.SRC_SS.read(SRC_WORKSHEET_NAME)
 
     df.date = pd.to_datetime(df.date)
-#TODO this throws an error 
+
     dataUtils.outputReportData(
         df=df,
         fileName=TRG_FILE_NAME,

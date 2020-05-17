@@ -71,5 +71,11 @@ CONFIG_VARS = {
         'Book Sales': {
             'Date': 'date',
             'UK Sales': 'sales'},
+        'Instagram': {
+            'Platform': 'platform',
+            'Account ID': 'account_id',
+            'Date': 'date',
+            'New Daily Followers': 'follows',
+            'Daily Likes': 'likes'},
     }
 }
