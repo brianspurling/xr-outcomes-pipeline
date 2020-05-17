@@ -38,7 +38,7 @@ def extract():
 
     insta_likes_data['time'] = pd.to_datetime(insta_likes_data['date'])
     insta_likes_data['dates'] = insta_likes_data['time'].dt.date
-    sum_insta_likes_data=insta_likes_data.groupby(['dates'], as_index=False)['insta_likes_count'].sum()
+    sum_insta_likes_data=insta_likes_data.groupby(['dates'])['insta_likes_count'].sum()
 
     # Getting Instagram New Daily Followers 
     today = datetime.date.today()
