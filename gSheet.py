@@ -102,7 +102,15 @@ class GSheet():
         # To encourage human-friendly column names in the source GSheet, we
         # hold a column mapping ("source to target" mapping) in config
         # We also lose excess columns at this point.
-        df = df.rename(columns=conf.STM[wsName])
+        try:
+            cols = conf.STM[wsName]
+        except KeyError:
+            raise KeyError('Could not find ' + str(wsName) + ' in the STM ' +
+                           '(configVars). Add the worksheet, with all ' + 
+                           'source columns you want mapped over to target ' +
+                           'columns')
+
+        df = df.rename(columns=cols)
         df = df[conf.STM[wsName].values()]
 
         # Data tends to be read into Pandas as strings, so we set data types of

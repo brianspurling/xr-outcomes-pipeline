@@ -1,5 +1,7 @@
 """Load config variables for pippeline."""
 
+from datetime import datetime
+
 CONFIG_VARS = {
 
     'TMP_DATA_DIR': 'tmp_data',
@@ -32,6 +34,13 @@ CONFIG_VARS = {
         {'domain': 'https://rebellion.earth',
          'view_id': '184845394'},
     ],
+
+    'GLOBAL_INSTAGRAM_ID': '17841408183412514',
+    'GLOBAL_FACEBOOK_ID': '239675493315233',
+    'GLOBAL_FACEBOOK_ACCOUNT_CREATION_DATE': datetime.strptime('2018-07-21', "%Y-%m-%d"),
+
+    'FACEBOOK_API_URL_LIKES': "https://graph.facebook.com/v5.0/{api_id}/media?access_token={api_key}&fields=like_count%2Ctimestamp%2Cpermalink",
+    'FACEBOOK_API_URL_FOLLOWS': "https://graph.facebook.com/v5.0/{api_id}/insights?pretty=0&since={since}&until={until}&metric=follower_count&period=day&access_token={api_key}",
 
     'STM': {
         'Local Authorities': {
@@ -72,5 +81,9 @@ CONFIG_VARS = {
         'Book Sales': {
             'Date': 'date',
             'UK Sales': 'sales'},
+        'Instagram': {
+            'Date': 'date',
+            'New Daily Followers': 'follows',
+            'Daily Likes': 'likes'},
     }
 }
