@@ -12,6 +12,7 @@ import plWebsite
 import plSocialMedia
 import plBookSales
 import plActionNetwork
+import plInstagram
 
 
 def run(args):
@@ -41,6 +42,8 @@ def pipeline():
 
     plActionNetwork.extract()
 
+    plInstagram.extract()
+
     # Migrate from source to target
 
     plLocalAuthorities.migrate()
@@ -54,7 +57,8 @@ def pipeline():
     plBookSales.migrate()
 
     plActionNetwork.migrate()
-
+    
+    plInstagram.migrate()
 
 if __name__ == "__main__":
     run(sys.argv[1:])
