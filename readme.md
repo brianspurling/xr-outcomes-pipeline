@@ -8,7 +8,9 @@ The application consists of a set of Python modules, controlled by main.py, maki
 
 It is hosted on Heroku, where it is scheduled to run once a day.
 
-The pipeline picks up data from APIs and the SOURCE GSheet and writes it to the TARGET GSheet (for visibility) and S3 (for the dashboard)
+The pipeline has two stages:
+1. Extract data from external APIs and write to the SOURCE GSheet
+2. Migrate data from the SOURCE GSheet, possibly clean/validate it, and write it to the TARGET GSheet (for visibility) and S3 (for the dashboard)
 
 If no S3 creds are supplied, it creates CSV files instead.
 
