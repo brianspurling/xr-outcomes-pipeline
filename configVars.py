@@ -65,6 +65,10 @@ CONFIG_VARS = {
             'ga:date': 'date',
             'ga:pageviews': 'page_views',
             'ga:sessions': 'sessions'},
+        'Action Network': {
+            'date': 'date',
+            'dailysubscribes': 'daily',
+            'cumulativesubscribes': 'cumulative'},
         'Book Sales': {
             'Date': 'date',
             'UK Sales': 'sales'},

@@ -39,7 +39,7 @@ def pipeline():
 
     plWebsite.extract()
 
-    plActionNetwork.extract()
+    # plActionNetwork.extract()  # Disabled, until we get connection details. Manual import to spreadsheet instead.
 
     # Migrate from source to target
 

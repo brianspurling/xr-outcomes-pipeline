@@ -22,10 +22,9 @@ def extract():
 
 def migrate():
     """Migrate data from source to target."""
-    pass
-    # df = conf.SRC_SS.read(SRC_WORKSHEET_NAME)
+    df = conf.SRC_SS.read(SRC_WORKSHEET_NAME)
 
-    # dataUtils.outputReportData(
-    #     df=df,
-    #     fileName=TRG_FILE_NAME,
-    #     writeLocalCSV=conf.LOCAL_CSV_OP)
+    dataUtils.outputReportData(
+        df=df,
+        fileName=TRG_FILE_NAME,
+        writeLocalCSV=conf.LOCAL_CSV_OP)

@@ -102,7 +102,6 @@ class GSheet():
         # To encourage human-friendly column names in the source GSheet, we
         # hold a column mapping ("source to target" mapping) in config
         # We also lose excess columns at this point.
-
         df = df.rename(columns=conf.STM[wsName])
         df = df[conf.STM[wsName].values()]
 
