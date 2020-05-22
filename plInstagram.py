@@ -22,25 +22,26 @@ def extract():
         api_id=conf.GLOBAL_INSTAGRAM_ID,
         api_key=conf.FACEBOOK_INSTAGRAM_API_KEY_GLOBAL)
 
-    insta_likes_data = pd.DataFrame(columns=['date', 'permalink', 'insta_likes_count'])
-
+    instaLikesData = []
     while True:
         r_o = requests.get(url_l)
         data_l = r_o.json()
-        like_data=data_l['data']
+        like_data = data_l['data']
         for d in like_data:
-            insta_likes_data = insta_likes_data.append({
-            'date' : d['timestamp'],
-            'permalink' : d['permalink'],
-            'insta_likes_count': d['like_count']}, ignore_index=True)
+            instaLike = {
+                'date': d['timestamp'],
+                'permalink': d['permalink'],
+                'insta_likes_count': d['like_count']}
+            instaLikesData.append(instaLike)
         if 'next' in data_l['paging']:
             url_l = data_l['paging']['next']
         else:
             break
 
-    insta_likes_data['time'] = pd.to_datetime(insta_likes_data['date'])
-    insta_likes_data['dates'] = insta_likes_data['time'].dt.date
-    sum_insta_likes_data=insta_likes_data.groupby(['dates'])['insta_likes_count'].sum()
+    df_instaLikes = pd.DataFrame(instaLikesData)
+    df_instaLikes['time'] = pd.to_datetime(df_instaLikes['date'])
+    df_instaLikes['dates'] = df_instaLikes['time'].dt.date
+    sum_insta_likes_data = df_instaLikes.groupby(['dates'])['insta_likes_count'].sum()
 
     # Getting Instagram followers
 
@@ -56,27 +57,28 @@ def extract():
         until=until,
         api_key=conf.FACEBOOK_INSTAGRAM_API_KEY_GLOBAL)
 
-    insta_follow_data = pd.DataFrame(columns=['date','insta_follower_count'])
-
+    instaFollowsData = []
     x = 1
     for x in range(1, 150):
         r_o = requests.get(url_o)
         data_o = r_o.json()
         follow_data=data_o['data'][0]['values']
         for d in follow_data:
-            insta_follow_data = insta_follow_data.append({
-                'date' : d['end_time'],
-                'insta_follower_count': d['value']}, ignore_index=True)
+            instaFollow = {
+                 'date': d['end_time'],
+                 'insta_follower_count': d['value']}
+            instaFollowsData.append(instaFollow)
         url_o = data_o['paging']['previous']
         x += 1
 
-    insta_follow_data['dates'] = pd.to_datetime(insta_follow_data['date'])
-    insta_follow_data['dates'] = insta_follow_data['dates'].dt.date
-    insta_follow_data = insta_follow_data.drop(columns=['date'])
+    df_instaFollows = pd.DataFrame(instaFollowsData)
+    df_instaFollows['dates'] = pd.to_datetime(df_instaFollows['date'])
+    df_instaFollows['dates'] = df_instaFollows['dates'].dt.date
+    df_instaFollows = df_instaFollows.drop(columns=['date'])
 
     # Merge likes and follows and write to source SS
 
-    insta_data_joined = insta_follow_data.merge(
+    insta_data_joined = df_instaFollows.merge(
         sum_insta_likes_data,
         how='outer',
         left_on='dates',
