@@ -12,9 +12,14 @@ from googleapiclient.discovery import build as google_build
 import os
 import json
 
+SRC_WORKSHEET_NAME_OLD = "Website - Old"
 SRC_WORKSHEET_NAME = "Website"
 TRG_FILE_NAME = "website"
 
+
+# The Google Analytics account used on the website was changed in June 2020
+# The data from the old one thus became a static historic copy, with new data
+# coming via the API for the new account.
 
 def extract():
     """Process JSON response from API."""
@@ -102,10 +107,20 @@ def processResponse(response):
 
 
 def migrate():
-    """Migrate data from source to target."""
-    df = conf.SRC_SS.read(SRC_WORKSHEET_NAME)
+    """Migrate data from the two source datasets to target."""
+    df_old = conf.SRC_SS.read(SRC_WORKSHEET_NAME_OLD)
+    df_curr = conf.SRC_SS.read(SRC_WORKSHEET_NAME)
+
+    df = pd.concat([df_old, df_curr])
 
     df.date = pd.to_datetime(df.date)
+    df.page_views = pd.to_numeric(df.page_views)
+    df.sessions = pd.to_numeric(df.sessions)
+    
+    # Group by, to ensure there's no duplicated row from the overlap day
+    df = df.groupby(['domain', 'date']).agg(
+        {'page_views':'sum','sessions':'sum'}).reset_index()
+
 
     dataUtils.outputReportData(
         df=df,
