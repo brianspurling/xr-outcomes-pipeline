@@ -50,7 +50,7 @@ def extract():
                 'reportRequests': [{
                     'viewId': view['view_id'],
                     'dateRanges': [{
-                        'startDate': '2019-01-01',
+                        'startDate': '2020-06-04',
                         'endDate': 'yesterday'}],
                     'metrics': [
                         {'expression': 'ga:pageviews'},
@@ -116,7 +116,7 @@ def migrate():
     df.date = pd.to_datetime(df.date)
     df.page_views = pd.to_numeric(df.page_views)
     df.sessions = pd.to_numeric(df.sessions)
-    
+
     # Group by, to ensure there's no duplicated row from the overlap day
     df = df.groupby(['domain', 'date']).agg(
         {'page_views':'sum','sessions':'sum'}).reset_index()
