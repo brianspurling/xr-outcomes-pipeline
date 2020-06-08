@@ -41,6 +41,7 @@ CONFIG_VARS = {
 
     'FACEBOOK_API_URL_LIKES': "https://graph.facebook.com/v5.0/{api_id}/media?access_token={api_key}&fields=like_count%2Ctimestamp%2Cpermalink",
     'FACEBOOK_API_URL_FOLLOWS': "https://graph.facebook.com/v5.0/{api_id}/insights?pretty=0&since={since}&until={until}&metric=follower_count&period=day&access_token={api_key}",
+    'FACEBOOK_API_URL_FB_FANS': "https://graph.facebook.com/v5.0/{api_id}/insights?pretty=0&since={since}&until={until}&metric=page_fans&period=day&access_token={api_key}",
 
     'STM': {
         'Local Authorities': {
