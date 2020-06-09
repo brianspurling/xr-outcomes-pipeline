@@ -29,7 +29,7 @@ def extract():
         until=until,
         api_key=conf.FACEBOOK_INSTAGRAM_API_KEY_GLOBAL)
 
-    fb_fans_data = pd.DataFrame(columns=['date',  'fb_likes' ])
+    fb_fans_data = pd.DataFrame(columns=['date',  'fb_fans' ])
 
     nextPage = True
     while nextPage:
@@ -113,13 +113,15 @@ def extract():
         left_on='date',
         right_on='date')
     
-    
+    # Renaming columns
     fb_data_joined = fb_data_joined.rename(columns={
         "date": "Date",
         "fb_fans": "Cumulative Follows",
         "likes_count": "Daily Likes"})
     log.info("Writing Data to Facebook WS")
 
+    # Sorting and writing to sheet
+    fb_data_joined=fb_data_joined.sort_values(by=['Date'], ascending=False)
     conf.SRC_SS.write(
         wsName="Facebook",
         df=fb_data_joined,
