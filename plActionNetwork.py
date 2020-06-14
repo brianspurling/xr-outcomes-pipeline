@@ -28,8 +28,6 @@ def extract():
 
     df = pd.read_csv(io.StringIO(r.content.decode('utf-8')))
 
-    print(df)
-
     conf.SRC_SS.write(
         wsName=SRC_WORKSHEET_NAME,
         df=df,
