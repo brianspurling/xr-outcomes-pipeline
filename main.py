@@ -40,7 +40,7 @@ def pipeline():
 
     plWebsite.extract()
 
-    # plActionNetwork.extract()  # Disabled, until we get connection details. Manual import to spreadsheet instead.
+    plActionNetwork.extract()
 
     plInstagram.extract()
 
@@ -57,7 +57,7 @@ def pipeline():
     plBookSales.migrate()
 
     plActionNetwork.migrate()
-    
+
     plInstagram.migrate()
 
 if __name__ == "__main__":
