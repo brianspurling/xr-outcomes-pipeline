@@ -61,12 +61,19 @@ class Conf():
 
         # And API keys
 
-        if 'ACTION_NETWORK_API_KEY' not in os.environ:
-            if hasattr(self, 'ACTION_NETWORK_API_KEY'):
-                os.environ["ACTION_NETWORK_API_KEY"] = self.ACTION_NETWORK_API_KEY
+        if 'NEXTCLOUD_USER_NAME' not in os.environ:
+            if hasattr(self, 'NEXTCLOUD_USER_NAME'):
+                os.environ["NEXTCLOUD_USER_NAME"] = self.NEXTCLOUD_USER_NAME
             else:
-                raise ValueError("Missing config: Action Network API Key")
-        self.ACTION_NETWORK_API_KEY = os.environ["ACTION_NETWORK_API_KEY"]
+                raise ValueError("Missing config: NextCloud username")
+        self.NEXTCLOUD_USER_NAME = os.environ["NEXTCLOUD_USER_NAME"]
+
+        if 'NEXTCLOUD_PASSWORD' not in os.environ:
+            if hasattr(self, 'NEXTCLOUD_PASSWORD'):
+                os.environ["NEXTCLOUD_PASSWORD"] = self.NEXTCLOUD_PASSWORD
+            else:
+                raise ValueError("Missing config: NextCloud password")
+        self.NEXTCLOUD_PASSWORD = os.environ["NEXTCLOUD_PASSWORD"]
 
         if 'FACEBOOK_INSTAGRAM_API_KEY_GLOBAL' not in os.environ:
             if hasattr(self, 'FACEBOOK_INSTAGRAM_API_KEY_GLOBAL'):
