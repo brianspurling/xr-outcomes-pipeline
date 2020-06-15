@@ -32,7 +32,8 @@ CONFIG_VARS = {
 
     'GOOGLE_ANALYTICS_VIEWS': [
         {'domain': 'https://rebellion.earth',
-         'view_id': '184845394'},
+         'view_id': '220233948',
+         'old_view_id': '184845394'},
     ],
 
     'GLOBAL_INSTAGRAM_ID': '17841408183412514',
@@ -69,6 +70,11 @@ CONFIG_VARS = {
             'Cumulative Follows': 'follows_cum',
             'Cumulative Likes': 'likes_cum',
             'Cumulative Views': 'views_cum'},
+        'Website - Old': {
+            'domain': 'domain',
+            'ga:date': 'date',
+            'ga:pageviews': 'page_views',
+            'ga:sessions': 'sessions'},
         'Website': {
             'domain': 'domain',
             'ga:date': 'date',
