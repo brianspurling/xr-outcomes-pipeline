@@ -92,7 +92,7 @@ CONFIG_VARS = {
             'UK Sales': 'sales'},
         'Instagram': {
             'Date': 'date',
-            'New Daily Followers': 'follows',
-            'Daily Likes': 'likes'},
+            'Daily Likes': 'likes',
+            'Cumulative Followers': 'follows_cum'},
     }
 }

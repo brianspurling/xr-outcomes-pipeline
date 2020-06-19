@@ -40,8 +40,8 @@ def extract():
 
     df_instaLikes = pd.DataFrame(instaLikesData)
     df_instaLikes['time'] = pd.to_datetime(df_instaLikes['date'])
-    df_instaLikes['dates'] = df_instaLikes['time'].dt.date
-    sum_insta_likes_data = df_instaLikes.groupby(['dates'])['insta_likes_count'].sum()
+    df_instaLikes['date'] = df_instaLikes['time'].dt.date
+    sum_insta_likes_data = df_instaLikes.groupby(['date'])['insta_likes_count'].sum()
 
     # Getting Instagram followers
 
@@ -72,26 +72,34 @@ def extract():
         x += 1
 
     df_instaFollows = pd.DataFrame(instaFollowsData)
-    df_instaFollows['dates'] = pd.to_datetime(df_instaFollows['date'])
-    df_instaFollows['dates'] = df_instaFollows['dates'].dt.date
-    df_instaFollows = df_instaFollows.drop(columns=['date'])
+    df_instaFollows['date'] = pd.to_datetime(df_instaFollows['date'])
+    df_instaFollows['date'] = df_instaFollows['date'].dt.date
 
     # Merge likes and follows and write to source SS
 
     insta_data_joined = df_instaFollows.merge(
         sum_insta_likes_data,
         how='outer',
-        left_on='dates',
-        right_on='dates')
+        left_on='date',
+        right_on='date')
+
+    insta_data_joined = insta_data_joined[[
+        'date',
+        'insta_likes_count',
+        'insta_follower_count']]
+
+    insta_data_joined = insta_data_joined.sort_values('date')
+    insta_data_joined['cumulative_followers'] = \
+        insta_data_joined.insta_follower_count.cumsum()
 
     insta_data_joined = insta_data_joined.rename(columns={
-        "dates": "Date",
+        "date": "Date",
         "insta_likes_count": "Daily Likes",
-        "insta_follower_count": "New Daily Followers"})
+        "insta_follower_count": "New Daily Followers",
+        "cumulative_followers": "Cumulative Followers"})
 
     mask = insta_data_joined['Date'] >= conf.GLOBAL_FACEBOOK_ACCOUNT_CREATION_DATE.date()
     insta_data_joined = insta_data_joined.loc[mask]
-
     conf.SRC_SS.write(
         wsName="Instagram",
         df=insta_data_joined,
