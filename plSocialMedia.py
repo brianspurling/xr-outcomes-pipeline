@@ -20,6 +20,9 @@ def migrate():
     # Remove any that don't have a date
     df = df.loc[~pd.isnull(df.date)]
 
+    df.loc[df.platform == 'YouTube', 'follows_cum'] = \
+        df.loc[df.platform == 'YouTube', 'follows'].cumsum()
+        
     # There are some gaps in the cumulative source data which we plug
     # manually to smooth out the charts
     mask = df.platform == 'Twitter'

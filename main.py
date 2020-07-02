@@ -41,7 +41,7 @@ def pipeline():
 
     plWebsite.extract()
 
-    plActionNetwork.extract()  
+    plActionNetwork.extract()
 
     plInstagram.extract()
     
@@ -60,7 +60,7 @@ def pipeline():
     plBookSales.migrate()
 
     plActionNetwork.migrate()
-    
+
     plInstagram.migrate()
 
     plFacebook.migrate()
