@@ -13,7 +13,7 @@ SRC_WORKSHEET_NAME = "Facebook"
 TRG_FILE_NAME = "facebook"
 
 def extract():
-    log.info("hello from the facebook pipeline")
+    
     
     # Getting Facebook Fans
     log.info("Fetching Facebook Fans from Facebook API")
@@ -31,8 +31,8 @@ def extract():
 
     fb_fans_data = pd.DataFrame(columns=['date',  'fb_fans' ])
 
-    nextPage = True
-    while nextPage:
+    # nextPage = True
+    while True:
         r_o = requests.get(url_l)
         data_l = r_o.json()
         if data_l['data'] !=[]:
@@ -41,12 +41,12 @@ def extract():
             end_time=end_time[:10]
             end_time=datetime.datetime.strptime(end_time, '%Y-%m-%d') 
             for d in like_data:
-                print(d)
+                
                 fb_fans_data = fb_fans_data.append({
                 'date' : d['end_time'],
                 'fb_fans': d['value']}, ignore_index=True)
             if end_time >= fb_account_creation:
-                nextPage = True
+                # nextPage = True
                 url_l = data_l['paging']['previous']
             else:
                 break
@@ -58,8 +58,8 @@ def extract():
     fb_post_ids_data = pd.DataFrame(columns=['date',  'post_ids' ])
     log.info("Fetching Facebook Post Ids")
 
-    nextPage = True
-    while nextPage:
+    # nextPage = True
+    while True:
         r_o = requests.get(url_l)
         data_l = r_o.json()
 
@@ -69,7 +69,7 @@ def extract():
             'date' : d['created_time'],
             'post_ids': d['id']}, ignore_index=True)
         if 'next' in data_l['paging']:
-            nextPage = True
+            # nextPage = True
             url_l = data_l['paging']['next']
         else:
             break
@@ -78,7 +78,7 @@ def extract():
     fb_likes_by_date = pd.DataFrame(columns=['id',  'likes_count' ])
     log.info("Fetching Facebook Post Id Total Like Count")
     for ids in fb_post_ids_data['post_ids']:
-        print(ids)
+        
         url_l = "https://graph.facebook.com/"+ids+"?fields=likes.summary(true)&access_token="+conf.FACEBOOK_INSTAGRAM_API_KEY_GLOBAL
         r_o = requests.get(url_l)
         data_l = r_o.json()
@@ -123,7 +123,7 @@ def extract():
     # Sorting and writing to sheet
     fb_data_joined=fb_data_joined.sort_values(by=['Date'], ascending=False)
     conf.SRC_SS.write(
-        wsName="Facebook",
+        wsName=SRC_WORKSHEET_NAME,
         df=fb_data_joined,
         bulk_or_delta='BULK')
     
