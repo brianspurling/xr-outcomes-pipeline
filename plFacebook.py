@@ -13,120 +13,100 @@ SRC_WORKSHEET_NAME = "Facebook"
 TRG_FILE_NAME = "facebook"
 
 def extract():
-    
-    
-    # Getting Facebook Fans
-    log.info("Fetching Facebook Fans from Facebook API")
-    fb_account_creation='2018-07-18'
-    fb_account_creation=datetime.datetime.strptime(fb_account_creation, '%Y-%m-%d')
-    today = datetime.date.today()
-    since=(today - datetime.timedelta(days=5)).strftime("%Y-%m-%d")
-    until=(today).strftime("%Y-%m-%d")
-    
-    url_l = conf.FACEBOOK_API_URL_FB_FANS.format(
+
+    # Get Facebook follows
+
+    log.info("Fetching Facebook follows from Facebook API")
+
+    df_fbFollows = dataUtils.facebookGraphAPI_getFollows(
+        dayRange=conf.FACEBOOK_API_FB_DAY_RANGE,
+        metric='page_fans', # Facebook only allows "fans", not followers (which Insta does allow)
+        accountStartDate=conf.GLOBAL_FACEBOOK_ACCOUNT_CREATION_DATE)
+
+    # Get post ids
+
+    log.info("Fetching Facebook post IDs from Facebook API")
+
+    url = conf.FACEBOOK_API_URL_FB_POSTS.format(
         api_id=conf.GLOBAL_FACEBOOK_ID,
-        since=since,
-        until=until,
         api_key=conf.FACEBOOK_INSTAGRAM_API_KEY_GLOBAL)
 
-    fb_fans_data = pd.DataFrame(columns=['date',  'fb_fans' ])
+    posts = []
+    while url:
+        r = dataUtils.requestGet(url, 10)
+        url = None
+        rawData = r.json()
+        rawPosts = rawData['data']
+        for rawPost in rawPosts:
+            posts.append({
+                'date' : rawPost['created_time'],
+                'post_id': rawPost['id']})
+        if 'next' in rawData['paging']:
+            url = rawData['paging']['next']
 
-    # nextPage = True
-    while True:
-        r_o = requests.get(url_l)
-        data_l = r_o.json()
-        if data_l['data'] !=[]:
-            like_data=data_l['data'][0]['values']
-            end_time=like_data[0]['end_time']
-            end_time=end_time[:10]
-            end_time=datetime.datetime.strptime(end_time, '%Y-%m-%d') 
-            for d in like_data:
-                
-                fb_fans_data = fb_fans_data.append({
-                'date' : d['end_time'],
-                'fb_fans': d['value']}, ignore_index=True)
-            if end_time >= fb_account_creation:
-                # nextPage = True
-                url_l = data_l['paging']['previous']
-            else:
-                break
-        else:
-            break
+    df_posts = pd.DataFrame(posts)
 
-    #get all post ids
-    url_l = "https://graph.facebook.com/v5.0/239675493315233/posts?access_token="+conf.FACEBOOK_INSTAGRAM_API_KEY_GLOBAL
-    fb_post_ids_data = pd.DataFrame(columns=['date',  'post_ids' ])
-    log.info("Fetching Facebook Post Ids")
+    # Get likes for all post ids
 
-    # nextPage = True
-    while True:
-        r_o = requests.get(url_l)
-        data_l = r_o.json()
+    log.info("Fetching Facebook posts' likes from Facebook API")
 
-        post_data=data_l['data']
-        for d in post_data:
-            fb_post_ids_data = fb_post_ids_data.append({
-            'date' : d['created_time'],
-            'post_ids': d['id']}, ignore_index=True)
-        if 'next' in data_l['paging']:
-            # nextPage = True
-            url_l = data_l['paging']['next']
-        else:
-            break
-        
-    # Get Like count for all post ids 
-    fb_likes_by_date = pd.DataFrame(columns=['id',  'likes_count' ])
-    log.info("Fetching Facebook Post Id Total Like Count")
-    for ids in fb_post_ids_data['post_ids']:
-        
-        url_l = "https://graph.facebook.com/"+ids+"?fields=likes.summary(true)&access_token="+conf.FACEBOOK_INSTAGRAM_API_KEY_GLOBAL
-        r_o = requests.get(url_l)
-        data_l = r_o.json()
-        fb_likes_by_date = fb_likes_by_date.append({
-            'id' : ids,
-            'likes_count': data_l['likes']['summary']['total_count']}, ignore_index=True)
+    likes = []
+    for i, row in df_posts.iterrows():
+        url = conf.FACEBOOK_API_URL_FB_LIKES.format(
+            post_id=row['post_id'],
+            api_key=conf.FACEBOOK_INSTAGRAM_API_KEY_GLOBAL)
+        r = dataUtils.requestGet(url, 10)
+        data = r.json()
+        likes.append({
+            'post_id' : row['post_id'],
+            'likes_count': data['likes']['summary']['total_count']})
 
-    log.info("Merging Post id, likes count and dates")
-    fb_data_joined = fb_likes_by_date.merge(
-            fb_post_ids_data,
+    df_fbLikes = pd.DataFrame(likes)
+
+    # Process Data
+
+    # Merge Post id, likes count and dates
+    df_fbPostsAndLikes = df_fbLikes.merge(
+            df_posts,
             how='outer',
-            left_on='id',
-            right_on='post_ids')
+            left_on='post_id',
+            right_on='post_id')
 
-    log.info("Aggregating likes count and dates")
-    fb_data_joined['date'] = pd.to_datetime(fb_data_joined['date'])
-    fb_data_joined['date'] = fb_data_joined['date'].dt.date
-    fb_data_joined = fb_data_joined.drop(columns=['id'])
-    fb_data_joined = fb_data_joined.drop(columns=['post_ids'])
-    fb_data_joined = fb_data_joined.groupby(['date'])['likes_count'].sum().reset_index()
-    
-    # convert fb fan data date column 
-    log.info("Transforming date col of fb fan dataframe")
-    fb_fans_data['date'] = pd.to_datetime(fb_fans_data['date'])
-    fb_fans_data['date'] = fb_fans_data['date'].dt.date
-    
-    # Merge likes and follows and write to source SS
-    log.info("Merging Like and Fan data")
-    fb_data_joined = fb_data_joined.merge(
-        fb_fans_data,
+    # Aggregate likes count and dates
+    df_fbPostsAndLikes['date'] = pd.to_datetime(df_fbPostsAndLikes['date'])
+    df_fbPostsAndLikes['date'] = df_fbPostsAndLikes['date'].dt.date
+    df_fbPostsAndLikes = df_fbPostsAndLikes.drop(columns=['post_id'])
+    df_fbPostsAndLikes = df_fbPostsAndLikes.groupby(['date'])['likes_count'].sum().reset_index()
+
+    # Merge likes and follows
+    df_fbAll = df_fbPostsAndLikes.merge(
+        df_fbFollows,
         how='outer',
         left_on='date',
         right_on='date')
-    
+
+    # Could be no likes on a given day
+    df_fbAll.likes_count = df_fbAll.likes_count.fillna(0)
+
     # Renaming columns
-    fb_data_joined = fb_data_joined.rename(columns={
+    df_fbAll = df_fbAll.rename(columns={
         "date": "Date",
-        "fb_fans": "Cumulative Follows",
+        "follows": "Cumulative Follows",
         "likes_count": "Daily Likes"})
-    log.info("Writing Data to Facebook WS")
 
     # Sorting and writing to sheet
-    fb_data_joined=fb_data_joined.sort_values(by=['Date'], ascending=False)
+
+    df_fbAll = df_fbAll.sort_values(by=['Date'], ascending=False)
+
+    # Remove today's data, because Facebook doesn't give us cumulative follows
+    # for the latest date
+    df_fbAll = df_fbAll.drop(df_fbAll.index[0])
+
     conf.SRC_SS.write(
         wsName=SRC_WORKSHEET_NAME,
-        df=fb_data_joined,
+        df=df_fbAll,
         bulk_or_delta='BULK')
-    
+
 
 def migrate():
     """Migrate data from source to target."""

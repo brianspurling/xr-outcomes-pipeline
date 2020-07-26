@@ -44,10 +44,10 @@ def pipeline():
     plActionNetwork.extract()
 
     plInstagram.extract()
-    
+
     plFacebook.extract()
 
-    # # Migrate from source to target
+    # Migrate from source to target
 
     plLocalAuthorities.migrate()
 
