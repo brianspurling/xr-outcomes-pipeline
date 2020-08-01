@@ -37,12 +37,18 @@ CONFIG_VARS = {
     ],
 
     'GLOBAL_INSTAGRAM_ID': '17841408183412514',
+    'GLOBAL_INSTAGRAM_ACCOUNT_CREATION_DATE': datetime.strptime('2018-07-18', "%Y-%m-%d"),
+
     'GLOBAL_FACEBOOK_ID': '239675493315233',
-    'GLOBAL_FACEBOOK_ACCOUNT_CREATION_DATE': datetime.strptime('2018-07-21', "%Y-%m-%d"),
+    'GLOBAL_FACEBOOK_ACCOUNT_CREATION_DATE': datetime.strptime('2018-07-27', "%Y-%m-%d"),
 
     'FACEBOOK_API_URL_LIKES': "https://graph.facebook.com/v5.0/{api_id}/media?access_token={api_key}&fields=like_count%2Ctimestamp%2Cpermalink",
-    'FACEBOOK_API_URL_FOLLOWS': "https://graph.facebook.com/v5.0/{api_id}/insights?pretty=0&since={since}&until={until}&metric=follower_count&period=day&access_token={api_key}",
-    'FACEBOOK_API_URL_FB_FANS': "https://graph.facebook.com/v5.0/{api_id}/insights?pretty=0&since={since}&until={until}&metric=page_fans&period=day&access_token={api_key}",
+    'FACEBOOK_API_URL_FOLLOWS': "https://graph.facebook.com/v5.0/{api_id}/insights?pretty=0&since={since}&until={until}&metric={metric}&period=day&access_token={api_key}",
+    'FACEBOOK_API_URL_FB_POSTS': "https://graph.facebook.com/v5.0/{api_id}/posts?access_token={api_key}",
+    'FACEBOOK_API_URL_FB_LIKES': "https://graph.facebook.com/{post_id}?fields=likes.summary(true)&access_token={api_key}",
+
+    'FACEBOOK_API_FB_DAY_RANGE': 93,
+    'FACEBOOK_API_IG_DAY_RANGE': 30,
 
     'ACTION_NETWORK_NEXTCLOUD_FILE_URL': "https://cloud.extinctionrebellion.org.uk/remote.php/dav/files/brianspurling/Data%20Tech%20Team%20%5Bwg%5D/Results%20Measurement%20Project/AutoUpload/Email-subscribers.csv",
 
@@ -94,6 +100,10 @@ CONFIG_VARS = {
         'Instagram': {
             'Date': 'date',
             'Daily Likes': 'likes',
-            'Cumulative Followers': 'follows_cum'},
+            'Cumulative Follows': 'follows_cum'},
+        'Facebook': {
+            'Date': 'date',
+            'Daily Likes': 'likes',
+            'Cumulative Follows': 'follows_cum'},
     }
 }
