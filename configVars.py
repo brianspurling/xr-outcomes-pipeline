@@ -61,7 +61,8 @@ CONFIG_VARS = {
             'Declared?': 'is_declared',
             'Declaration Date': 'declaration_date',
             'Target Net Zero Year':  'target_net_zero_year',
-            'Source': 'source'},
+            'Source': 'source',
+            'Source of plan or progress report': 'action_plan'},
         'Political Parties': {
             'Organisation Name': 'org_name',
             'Is Political Org?': 'is_political_org',
