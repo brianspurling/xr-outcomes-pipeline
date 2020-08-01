@@ -62,7 +62,7 @@ def facebookGraphAPI_getFollows(dayRange, metric, accountStartDate):
         rawData = r.json()
         # The last call might be beyond the account start date and thus return
         # no data
-        if rawData['data'] != []:
+        if 'data' in rawData and rawData['data'] != []:
             rawFollows = rawData['data'][0]['values']
             for rawFollow in rawFollows:
                 follows.append({
