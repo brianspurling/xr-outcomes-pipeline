@@ -42,15 +42,15 @@ def outputReportData(df, fileName, writeLocalCSV=False):
             f.write(bytes_to_write)
 
 
-def facebookGraphAPI_getFollows(dayRange, metric, accountStartDate):
+def facebookGraphAPI_getFollows(appID, dayRange, metric, accountStartDate):
 
     today = datetime.date.today()
     since = (today - datetime.timedelta(days=dayRange)).strftime("%Y-%m-%d")
     until = today.strftime("%Y-%m-%d")
 
     url = conf.FACEBOOK_API_URL_FOLLOWS.format(
-        api_id=conf.GLOBAL_FACEBOOK_ID,
-        metric='page_fans', # Facebook only allows "fans", not followers (which Insta does allow)
+        api_id=appID,
+        metric=metric,
         since=since,
         until=until,
         api_key=conf.FACEBOOK_INSTAGRAM_API_KEY_GLOBAL)

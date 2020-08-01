@@ -19,6 +19,7 @@ def extract():
     log.info("Fetching Instagram follows from Facebook API")
 
     df_instaFollows = dataUtils.facebookGraphAPI_getFollows(
+        appID=conf.GLOBAL_INSTAGRAM_ID,
         dayRange=conf.FACEBOOK_API_IG_DAY_RANGE,
         metric='follower_count',
         accountStartDate=conf.GLOBAL_INSTAGRAM_ACCOUNT_CREATION_DATE)
@@ -63,6 +64,9 @@ def extract():
         'follows']]
 
     insta_data_joined = insta_data_joined.sort_values('date')
+
+    # Unlke facebook, the follows data from Insta comes back as daily figures
+    insta_data_joined.follows = insta_data_joined.follows.cumsum()
 
     insta_data_joined = insta_data_joined.rename(columns={
         "date": "Date",

@@ -19,6 +19,7 @@ def extract():
     log.info("Fetching Facebook follows from Facebook API")
 
     df_fbFollows = dataUtils.facebookGraphAPI_getFollows(
+        appID=conf.GLOBAL_FACEBOOK_ID,
         dayRange=conf.FACEBOOK_API_FB_DAY_RANGE,
         metric='page_fans', # Facebook only allows "fans", not followers (which Insta does allow)
         accountStartDate=conf.GLOBAL_FACEBOOK_ACCOUNT_CREATION_DATE)
