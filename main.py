@@ -43,9 +43,9 @@ def pipeline():
 
     plActionNetwork.extract()
 
-    plInstagram.extract()
+    #plInstagram.extract() -- temporarily commented out because auth creds have failed
 
-    plFacebook.extract()
+    #plFacebook.extract() -- temporarily commented out because auth creds have failed
 
     # Migrate from source to target
 
