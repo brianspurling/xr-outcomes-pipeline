@@ -50,7 +50,7 @@ CONFIG_VARS = {
     'FACEBOOK_API_FB_DAY_RANGE': 93,
     'FACEBOOK_API_IG_DAY_RANGE': 30,
 
-    'ACTION_NETWORK_NEXTCLOUD_FILE_URL': "https://cloud.extinctionrebellion.org.uk/remote.php/dav/files/brianspurling/Data%20Tech%20Team%20%5Bwg%5D/Results%20Measurement%20Project/AutoUpload/Email-subscribers.csv",
+    'ACTION_NETWORK_NEXTCLOUD_FILE_URL': "https://cloud.extinctionrebellion.uk/remote.php/dav/files/brianspurling/Data%20Tech%20Team%20%5Bwg%5D/Results%20Measurement%20Project/AutoUpload/Email-subscribers.csv",
 
 
     'STM': {
