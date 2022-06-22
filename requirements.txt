@@ -19,7 +19,7 @@ gspread-dataframe==3.0.4
 httplib2==0.18.0
 idna==2.9
 jmespath==0.9.5
-numpy==1.18.2
+numpy==1.22.0
 pandas==1.0.3
 protobuf==3.11.3
 pyasn1==0.4.8
