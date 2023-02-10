@@ -34,7 +34,7 @@ chardet==3.0.4
     #   requests
 configobj==5.0.6
     # via -r requirements.in
-cryptography==2.8
+cryptography==39.0.1
     # via
     #   -r requirements.in
     #   authlib
@@ -141,7 +141,6 @@ six==1.14.0
     # via
     #   -r requirements.in
     #   configobj
-    #   cryptography
     #   google-api-core
     #   google-api-python-client
     #   google-auth
