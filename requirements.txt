@@ -94,7 +94,7 @@ pandas==1.5.3
     # via
     #   -r requirements.in
     #   gspread-dataframe
-protobuf==3.11.3
+protobuf==3.18.3
     # via
     #   -r requirements.in
     #   google-api-core
@@ -145,7 +145,6 @@ six==1.14.0
     #   google-api-core
     #   google-api-python-client
     #   google-auth
-    #   protobuf
     #   python-dateutil
 uritemplate==3.0.1
     # via
