@@ -20,7 +20,7 @@ cachetools==4.0.0
     # via
     #   -r requirements.in
     #   google-auth
-certifi==2019.11.28
+certifi==2022.12.7
     # via
     #   -r requirements.in
     #   requests
