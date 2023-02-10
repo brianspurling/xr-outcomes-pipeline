@@ -2,7 +2,6 @@
 
 from datetime import datetime
 
-
 CONFIG_VARS = {
 
     'TMP_DATA_DIR': 'tmp_data',
