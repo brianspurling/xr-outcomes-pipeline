@@ -66,7 +66,7 @@ googleapis-common-protos==1.51.0
     # via
     #   -r requirements.in
     #   google-api-core
-gspread==3.3.0
+gspread==5.7.2
     # via
     #   -r requirements.in
     #   gspread-dataframe
