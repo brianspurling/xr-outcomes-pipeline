@@ -20,60 +20,18 @@ class GSheet():
 
         self.log_connecting()
 
-        gc = gspread.service_account(filename='google_auth_prod_creds.json')
+        try:
+            with open(conf.GOOGLE_API_KEY_FILE, 'r') as f:
+                credentials = json.load(f)
+        except IOError:
+            credentials = json.loads(os.environ.get('GOOGLE_CREDENTIALS_JSON'))
 
-        self.ss = gc.open(ssName)
+        self.client = gspread.service_account_from_dict(credentials)
+
+        self.ss = self.client.open(ssName)
 
         self.log_connected()
 
-    # GSpread docs recommend oauth2client, but Google Analytics requires
-    # version 1.5.2, so we're doing Google Analytics the hard way with authlib
-    def create_assertion_session(self, conf_file, scopes, subject=None):
-        """Auth with Google API."""
-        try:
-
-            with open(conf_file, 'r') as f:
-                conf = json.load(f)
-
-            token_url = conf['token_uri']
-            issuer = conf['client_email']
-            key = conf['private_key']
-            key_id = conf.get('private_key_id')
-
-            header = {'alg': 'RS256'}
-            if conf['private_key_id']:
-                header['kid'] = conf['private_key_id']
-
-        except IOError:
-
-            service_account_info = \
-                json.loads(os.environ.get('GOOGLE_CREDENTIALS_JSON'))
-
-            header = {'alg': 'RS256'}
-            if service_account_info['private_key_id']:
-                header['kid'] = service_account_info['private_key_id']
-
-            token_url = service_account_info['token_uri']
-            issuer = service_account_info['client_email']
-            key = service_account_info['private_key']
-            key_id = service_account_info.get('private_key_id')
-
-            header = {'alg': 'RS256'}
-            if service_account_info['private_key_id']:
-                header['kid'] = service_account_info['private_key_id']
-
-        # Google puts scope in payload
-        claims = {'scope': ' '.join(scopes)}
-        return AssertionSession(
-            grant_type=AssertionSession.JWT_BEARER_GRANT_TYPE,
-            token_url=token_url,
-            issuer=issuer,
-            audience=token_url,
-            claims=claims,
-            subject=subject,
-            key=key,
-            header=header,
-            token_endpoint=None)
 
     def read(self, wsName):
         """Read data from GSheet."""
