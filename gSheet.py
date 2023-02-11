@@ -20,13 +20,9 @@ class GSheet():
 
         self.log_connecting()
 
-        session = self.create_assertion_session(
-            conf.GOOGLE_API_KEY_FILE,
-            conf.GOOGLE_API_SCOPE)
+        gc = gspread.service_account(filename='google_auth_prod_creds.json')
 
-        self.client = gspread.Client(None, session)
-
-        self.ss = self.client.open(ssName)
+        self.ss = gc.open(ssName)
 
         self.log_connected()
 
